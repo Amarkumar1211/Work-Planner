@@ -6,6 +6,8 @@ import { createBrowserClient } from '@/lib/supabase';
 import Link from 'next/link';
 import styles from '../login/auth.module.css';
 
+export const dynamic = 'force-dynamic';
+
 export default function SignupPage() {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');

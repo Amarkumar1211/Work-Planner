@@ -12,6 +12,8 @@ import PerformanceDashboard from '@/components/PerformanceDashboard';
 import TaskForm from '@/components/TaskForm';
 import styles from './dashboard.module.css';
 
+export const dynamic = 'force-dynamic';
+
 type ViewMode = 'daily' | 'monthly' | 'performance';
 
 export default function DashboardPage() {

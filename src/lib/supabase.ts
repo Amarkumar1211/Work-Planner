@@ -2,8 +2,12 @@ import { createClient } from '@supabase/supabase-js';
 
 // Browser client for client components (Edge-compatible)
 export const createBrowserClient = () => {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Missing Supabase environment variables');
+    }
 
     return createClient(supabaseUrl, supabaseAnonKey, {
         auth: {
@@ -16,8 +20,12 @@ export const createBrowserClient = () => {
 
 // Server client for server components and API routes
 export const createServerClient = () => {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Missing Supabase environment variables');
+    }
 
     return createClient(supabaseUrl, supabaseAnonKey);
 };
