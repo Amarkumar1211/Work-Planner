@@ -27,14 +27,44 @@ export default function LoginPage() {
                 password,
             });
 
-            if (error) throw error;
-
-            if (data.user) {
-                router.push('/dashboard');
-                router.refresh();
+            if (error) {
+                console.error('Login error:', error);
+                throw error;
             }
+
+            if (!data.user) {
+                throw new Error('Login failed: No user data returned');
+            }
+
+            // Wait a moment for the session to be established in storage
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Verify session is persisted
+            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+            if (sessionError) {
+                console.error('Session error:', sessionError);
+                throw sessionError;
+            }
+
+            if (!sessionData.session) {
+                throw new Error('Session was not established. Please try again.');
+            }
+
+            // Navigate to dashboard
+            router.push('/dashboard');
+            router.refresh();
         } catch (err: any) {
-            setError(err.message || 'Failed to login');
+            console.error('Login error details:', err);
+            const errorMessage = err.message || 'Failed to login';
+            
+            // Provide specific error messages
+            if (errorMessage.includes('Invalid login credentials')) {
+                setError('Invalid email or password');
+            } else if (errorMessage.includes('Email not confirmed')) {
+                setError('Please verify your email before signing in');
+            } else {
+                setError(errorMessage);
+            }
         } finally {
             setLoading(false);
         }

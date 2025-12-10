@@ -35,8 +35,15 @@ export default function SignupPage() {
             return;
         }
 
+        if (!fullName.trim()) {
+            setError('Full name is required');
+            setLoading(false);
+            return;
+        }
+
         try {
-            const { data, error } = await supabase.auth.signUp({
+            // Sign up the user
+            const { data, error: signupError } = await supabase.auth.signUp({
                 email,
                 password,
                 options: {
@@ -46,13 +53,54 @@ export default function SignupPage() {
                 },
             });
 
-            if (error) throw error;
+            if (signupError) throw signupError;
 
-            if (data.user) {
+            if (!data.user?.id) {
+                throw new Error('Failed to create user account');
+            }
+
+            // Create user profile via API route (server-side)
+            const profileRes = await fetch('/api/auth/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: data.user.id,
+                    fullName: fullName,
+                }),
+            });
+
+            if (!profileRes.ok) {
+                const profileData = await profileRes.json();
+                console.error('Profile creation error:', profileData);
+                throw new Error(profileData.error || 'Failed to create user profile');
+            }
+
+            // Check if session is established
+            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+            
+            if (sessionError) {
+                console.error('Session error:', sessionError);
+                // Account created, redirect to login
+                setError('Account created successfully! Please sign in.');
+                setTimeout(() => {
+                    router.push('/auth/login');
+                }, 2000);
+                return;
+            }
+
+            if (sessionData.session) {
+                // User is already signed in, go to dashboard
                 router.push('/dashboard');
                 router.refresh();
+            } else {
+                // Session not yet available (email verification required), redirect to login
+                setError('Account created! A verification email has been sent. Please sign in.');
+                setTimeout(() => {
+                    router.push('/auth/login');
+                }, 2000);
             }
         } catch (err: any) {
+            console.error('Signup error:', err);
             setError(err.message || 'Failed to create account');
         } finally {
             setLoading(false);

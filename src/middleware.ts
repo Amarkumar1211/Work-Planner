@@ -18,30 +18,33 @@ export async function middleware(req: NextRequest) {
         }
     );
 
-    // Get session from cookies - Supabase stores auth in a single cookie
-    // The cookie name pattern is: sb-<project-ref>-auth-token
-    // We'll look for any cookie that matches this pattern
     let session = null;
 
-    // Find the Supabase auth cookie
+    // Try to get session from auth cookie
     const cookieStore = req.cookies;
-    const authCookie = cookieStore.getAll().find(cookie =>
+    const allCookies = cookieStore.getAll();
+    
+    // Look for Supabase auth cookie (format: sb-<project-ref>-auth-token)
+    const authCookie = allCookies.find(cookie =>
         cookie.name.startsWith('sb-') && cookie.name.endsWith('-auth-token')
     );
 
     if (authCookie?.value) {
         try {
-            // Parse the cookie value which contains the session data
             const authData = JSON.parse(authCookie.value);
             if (authData.access_token && authData.refresh_token) {
-                const { data } = await supabase.auth.setSession({
+                const { data, error } = await supabase.auth.setSession({
                     access_token: authData.access_token,
                     refresh_token: authData.refresh_token
                 });
-                session = data.session;
+                
+                if (error) {
+                    console.error('Error setting session:', error);
+                } else {
+                    session = data.session;
+                }
             }
         } catch (error) {
-            // Cookie parsing failed, session will remain null
             console.error('Failed to parse auth cookie:', error);
         }
     }
