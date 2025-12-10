@@ -42,7 +42,8 @@ export default function SignupPage() {
         }
 
         try {
-            // Sign up the user
+            // Sign up the user with full_name in metadata
+            // The database trigger will automatically create the users_profile entry
             const { data, error: signupError } = await supabase.auth.signUp({
                 email,
                 password,
@@ -59,46 +60,15 @@ export default function SignupPage() {
                 throw new Error('Failed to create user account');
             }
 
-            // Create user profile via API route (server-side)
-            const profileRes = await fetch('/api/auth/profile', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: data.user.id,
-                    fullName: fullName,
-                }),
-            });
-
-            if (!profileRes.ok) {
-                const profileData = await profileRes.json();
-                console.error('Profile creation error:', profileData);
-                throw new Error(profileData.error || 'Failed to create user profile');
-            }
-
-            // Check if session is established
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+            // The database trigger creates the profile automatically
+            // Just redirect after successful signup
+            setError('');
             
-            if (sessionError) {
-                console.error('Session error:', sessionError);
-                // Account created, redirect to login
-                setError('Account created successfully! Please sign in.');
-                setTimeout(() => {
-                    router.push('/auth/login');
-                }, 2000);
-                return;
-            }
-
-            if (sessionData.session) {
-                // User is already signed in, go to dashboard
+            // Attempt redirect to dashboard or login based on session
+            setTimeout(() => {
                 router.push('/dashboard');
                 router.refresh();
-            } else {
-                // Session not yet available (email verification required), redirect to login
-                setError('Account created! A verification email has been sent. Please sign in.');
-                setTimeout(() => {
-                    router.push('/auth/login');
-                }, 2000);
-            }
+            }, 500);
         } catch (err: any) {
             console.error('Signup error:', err);
             setError(err.message || 'Failed to create account');
