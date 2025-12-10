@@ -1,0 +1,228 @@
+.monthlyPlanner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.monthNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.monthDisplay {
+    text-align: center;
+    flex: 1;
+}
+
+.monthDisplay h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
+}
+
+.thisMonthButton {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+}
+
+.thisMonthButton:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: var(--primary);
+}
+
+.monthStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+}
+
+.statItem {
+    padding: 1rem;
+}
+
+.statValue {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.statLabel {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calendarHeader {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-bottom: 1px;
+}
+
+.dayName {
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+}
+
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.calendarDay {
+    min-height: 120px;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    position: relative;
+}
+
+.calendarDay:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.emptyDay {
+    min-height: 120px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.otherMonth {
+    opacity: 0.3;
+}
+
+.today {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: var(--primary);
+}
+
+.dayNumber {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.dayTasks {
+    margin-top: 0.5rem;
+}
+
+.taskCount {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.completedCount {
+    font-size: 0.75rem;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+}
+
+.taskPreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.taskDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.taskDot:hover {
+    transform: scale(1.5);
+}
+
+.taskDot.priority-high {
+    background: #ff6b6b;
+}
+
+.taskDot.priority-medium {
+    background: #fee140;
+}
+
+.taskDot.priority-low {
+    background: #00f2fe;
+}
+
+.taskDot.completed {
+    opacity: 0.4;
+}
+
+.moreTasks {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-left: 0.25rem;
+}
+
+.loadingState {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+@media (max-width: 768px) {
+    .monthNav {
+        flex-direction: column;
+    }
+
+    .monthDisplay h2 {
+        font-size: 1.5rem;
+    }
+
+    .monthStats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .statValue {
+        font-size: 2rem;
+    }
+
+    .calendarDay {
+        min-height: 80px;
+        padding: 0.5rem;
+    }
+
+    .dayName {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .dayNumber {
+        font-size: 0.9rem;
+    }
+
+    .taskCount,
+    .completedCount {
+        font-size: 0.65rem;
+    }
+}

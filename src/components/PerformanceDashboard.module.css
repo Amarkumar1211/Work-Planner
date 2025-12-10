@@ -1,0 +1,231 @@
+.performanceDashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.statsGrid .glass-card {
+    text-align: center;
+    padding: 2rem;
+}
+
+.statIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.statValue {
+    font-size: 3rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.statLabel {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.statHint {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+.sectionTitle {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ratingGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.ratingCard {
+    text-align: center;
+}
+
+.ratingEmoji {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.ratingValue {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.ratingLabel {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.ratingBar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ratingBarFill {
+    height: 100%;
+    transition: width 0.5s ease-out;
+    border-radius: 4px;
+}
+
+.historyList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.historyItem {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+}
+
+.historyItem:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.historyDate {
+    text-align: center;
+}
+
+.historyDay {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.historyDateNum {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 0.25rem;
+}
+
+.historyStats {
+    flex: 1;
+}
+
+.historyProgress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.progressBar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    transition: width 0.5s ease-out;
+    border-radius: 6px;
+}
+
+.progressLabel {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.historyRating {
+    min-width: 120px;
+    text-align: right;
+}
+
+.loadingState,
+.emptyState {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.emptyState p:first-child {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.motivationCard {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.motivationCard h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.motivationCard p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .ratingGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .historyItem {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .historyDate {
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .historyRating {
+        min-width: auto;
+        text-align: center;
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .statValue {
+        font-size: 2.5rem;
+    }
+
+    .ratingValue {
+        font-size: 2rem;
+    }
+}
