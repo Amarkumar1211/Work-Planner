@@ -56,7 +56,7 @@ export default function LoginPage() {
         } catch (err: any) {
             console.error('Login error details:', err);
             const errorMessage = err.message || 'Failed to login';
-            
+
             // Provide specific error messages
             if (errorMessage.includes('Invalid login credentials')) {
                 setError('Invalid email or password');
@@ -113,6 +113,15 @@ export default function LoginPage() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                    </div>
+
+                    <div style={{ textAlign: 'right', marginBottom: '1.5rem', marginTop: '-0.5rem' }}>
+                        <Link
+                            href="/auth/forgot-password"
+                            style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textDecoration: 'none' }}
+                        >
+                            Forgot Password?
+                        </Link>
                     </div>
 
                     <button

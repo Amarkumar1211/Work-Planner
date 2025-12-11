@@ -1,45 +1,37 @@
+import { createBrowserClient as createSSRBrowserClient } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
 
 // Browser client for client components (Edge-compatible)
+// Now using @supabase/ssr to properly handle cookies for middleware support
 export const createBrowserClient = () => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
-        console.error('Missing Supabase environment variables:', {
-            hasUrl: !!supabaseUrl,
-            hasKey: !!supabaseAnonKey,
-        });
-        throw new Error(
-            'Supabase configuration error. Please check your .env.local file and ensure:\n' +
-            'NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>\n' +
-            'NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>'
-        );
+        throw new Error('Missing Supabase environment variables');
     }
 
-    return createClient(supabaseUrl, supabaseAnonKey, {
-        auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
-        }
-    });
+    return createSSRBrowserClient(supabaseUrl, supabaseAnonKey);
 };
 
 // Server client for server components and API routes
+// Note: In Next.js App Router, you should usually use createServerClient from @supabase/ssr
+// inside the component/route passing the cookie store.
+// This is a basic fallback using supabase-js for non-cookie contexts.
 export const createServerClient = () => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
-        console.error('Missing Supabase environment variables for server client:', {
-            hasUrl: !!supabaseUrl,
-            hasKey: !!supabaseAnonKey,
-        });
-        throw new Error('Missing Supabase configuration in server environment');
+        throw new Error('Missing Supabase environment variables');
     }
 
-    return createClient(supabaseUrl, supabaseAnonKey);
+    return createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+        }
+    });
 };
 
 // Database types

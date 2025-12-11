@@ -43,7 +43,6 @@ export default function SignupPage() {
 
         try {
             // Sign up the user with full_name in metadata
-            // The database trigger will automatically create the users_profile entry
             const { data, error: signupError } = await supabase.auth.signUp({
                 email,
                 password,
@@ -60,18 +59,37 @@ export default function SignupPage() {
                 throw new Error('Failed to create user account');
             }
 
-            // The database trigger creates the profile automatically
-            // Just redirect after successful signup
+            // Manually create the user profile (fallback if trigger doesn't work)
+            // This will fail silently if the trigger already created it
+            try {
+                await supabase.from('users_profile').insert({
+                    id: data.user.id,
+                    full_name: fullName,
+                    notification_preferences: {
+                        email: true,
+                        browser: true,
+                        daily_summary: true
+                    }
+                });
+            } catch (profileError) {
+                // Ignore error if profile already exists from trigger
+                console.log('Profile creation handled by trigger or already exists');
+            }
+
             setError('');
-            
-            // Attempt redirect to dashboard or login based on session
+
+            // Redirect to dashboard after successful signup
             setTimeout(() => {
                 router.push('/dashboard');
                 router.refresh();
             }, 500);
         } catch (err: any) {
             console.error('Signup error:', err);
-            setError(err.message || 'Failed to create account');
+            if (err.message && err.message.includes('User already registered')) {
+                setError('This email is already registered. Please sign in instead.');
+            } else {
+                setError(err.message || 'Failed to create account');
+            }
         } finally {
             setLoading(false);
         }
